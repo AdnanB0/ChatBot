@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BU.ai Real-Time Chat Service</title>
+    
+    <!-- 1. LINK TO YOUR LOCAL CSS FILE -->
+    <link href="style.css" rel="stylesheet">
+    
+    <!-- 2. EXTERNAL SCRIPTS (Tailwind Config MUST be here) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind Configuration for Binghamton University Colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bing-green-dark': '#006B3F', // Deep Emerald/Official BU Green
+                        'bing-green-light': '#38a169', // Slightly toned-down accent green for elegance
+                        'bing-black': '#0a0a0a', // True black for high contrast
+                        'gray-deep': '#141414',
+                    },
+                    boxShadow: {
+                        'glow-sm': '0 0 5px rgba(56, 161, 105, 0.5)',
+                        'glow-lg': '0 0 20px rgba(0, 107, 63, 0.7)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Load Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- The main application container -->
+    <div id="app-wrapper" class="w-full max-w-lg">
+        
+        <!-- START SCREEN: User must click to enable audio -->
+        <div id="start-screen" class="absolute inset-0 bg-bing-black bg-opacity-95 backdrop-blur-sm z-20 flex flex-col items-center justify-center rounded-2xl p-8 transition-opacity duration-300">
+            <h1 class="text-3xl font-bold text-white mb-6">Launch Bu.ai Service</h1>
+            <button id="start-button" class="bg-bing-green-dark hover:bg-bing-green-light text-white font-semibold py-3 px-8 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105 border-b-2 border-bing-green-light">
+                Initiate Secure Session
+            </button>
+            <p class="text-xs text-gray-400 mt-4 max-w-xs text-center">
+                (A click is required to enable sound effects in most browsers.)
+            </p>
+        </div>
+
+        <!-- STAGE 1: "Bu.ai" Text Flash -->
+        <div id="bu-ai-display" class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none opacity-0">
+            <h1 class="text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-bing-green-light to-white bu-ai-flash">
+                Bu.ai
+            </h1>
+        </div>
+        
+        <!-- STAGE 2: Chatbot Container (Initially hidden and scaled down) -->
+        <div id="chat-container" class="initial-state transition-all duration-700 ease-out p-6 rounded-2xl w-full premium-card">
+            
+            <header class="pb-4 mb-4 border-b border-gray-700/50">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-3xl font-extrabold text-white flex items-center">
+                        <svg class="w-8 h-8 mr-3 text-bing-green-light" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-bing-green-light to-white">Bu.ai Advisory</span>
+                    </h2>
+                </div>
+                <p id="user-info" class="text-sm text-gray-400 mt-2 truncate">
+                    Status: Initializing Secure Connection...
+                </p>
+            </header>
+            
+            <!-- Message Window -->
+            <div id="chat-window" class="space-y-5 pr-2 pt-2 border-t border-gray-700/30">
+                <!-- Messages will be rendered here -->
+            </div>
+
+            <!-- AI Typing Indicator -->
+            <div id="ai-loading" class="flex justify-start pt-4 hidden">
+                <div class="bg-gray-800 text-white text-sm p-3 rounded-xl shadow-inner max-w-xs flex items-center space-x-2">
+                    <svg class="animate-spin h-4 w-4 text-bing-green-light" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="italic text-gray-400">Bu.ai is retrieving data...</span>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="mt-6 pt-4 border-t border-gray-700/50 flex space-x-3">
+                <input id="chat-input" type="text" placeholder="Ask about graduation requirements, courses, or policies..." class="flex-grow p-3 bg-gray-900 text-white rounded-xl shadow-inner border border-gray-700/50 focus:outline-none transition duration-300" disabled>
+                <button id="send-button" class="bg-bing-green-dark hover:bg-bing-green-light text-white font-semibold py-3 px-5 rounded-xl transition duration-150 shadow-md hover:shadow-lg hover:scale-[1.02] disabled:bg-gray-700" disabled>
+                    Send
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3. LINK TO YOUR LOCAL JAVASCRIPT FILE -->
+    <!-- The type="module" is essential for handling the Firebase imports inside script.js -->
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>
+
+
